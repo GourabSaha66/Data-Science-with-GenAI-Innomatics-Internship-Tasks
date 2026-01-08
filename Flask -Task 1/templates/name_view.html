@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Name Analyzer</title>
+</head>
+<body>
+
+{% if status == "EMPTY" %}
+    <h3>⚠ No username detected</h3>
+    <p>Try:</p>
+    <code>?user=yourname</code>
+
+{% else %}
+    <h1>{{ analysis["UPPERCASE"] }}</h1>
+
+    <ul>
+        {% for key, value in analysis.items() %}
+            <li><b>{{ key.replace("_", " ") }}:</b> {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <small>Processed at {{ timestamp }}</small>
+{% endif %}
+
+</body>
+</html>

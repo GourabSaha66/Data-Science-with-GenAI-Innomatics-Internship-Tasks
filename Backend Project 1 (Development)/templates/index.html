@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Regex Engine</title>
+    <style>
+        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: 'Inter', system-ui; background: var(--bg); color: var(--text); padding: 40px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        .glass-card { background: var(--card); padding: 2rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        input, textarea { 
+            width: 100%; background: #0f172a; border: 1px solid #334155; 
+            color: #38bdf8; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 15px; margin-bottom: 1.5rem; box-sizing: border-box;
+        }
+        
+        .btn-submit { 
+            background: var(--primary); color: white; border: none; padding: 12px 24px; 
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; font-size: 16px;
+        }
+        .btn-submit:hover { background: #4f46e5; transform: translateY(-1px); }
+
+        .stats { color: #94a3b8; font-size: 0.8rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; background: #1e293b; border-radius: 8px; overflow: hidden; }
+        th { background: #334155; text-align: left; padding: 12px; color: #94a3b8; }
+        td { padding: 12px; border-bottom: 1px solid #334155; font-family: monospace; }
+        .match-highlight { color: #4ade80; font-weight: bold; }
+        .error-box { background: #450a0a; border: 1px solid #991b1b; color: #fecaca; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="margin-bottom: 0.5rem;">Regex<span style="color:var(--primary)">Parser</span></h1>
+    <p style="color: #94a3b8; margin-bottom: 2rem;">Professional Regular Expression Testing Tool</p>
+
+    <div class="glass-card">
+        {% if error %}
+            <div class="error-box"><strong>Error:</strong> {{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <label>Regular Expression</label>
+            <input type="text" name="regex_pattern" value="{{ regex_pattern }}" placeholder="^([a-zA-Z0-9._%-]+)..." required>
+            
+            <label>Test String</label>
+            <textarea name="test_string" rows="8" placeholder="Paste your text here..." required>{{ test_string }}</textarea>
+            
+            <button type="submit" class="btn-submit">Run Regex Search</button>
+        </form>
+    </div>
+
+    {% if results %}
+    <div style="margin-top: 3rem;">
+        <div class="stats">Results: {{ results|length }} matches found in {{ exec_time }}ms</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Match</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for match in results %}
+                <tr>
+                    <td>{{ match.id }}</td>
+                    <td class="match-highlight">"{{ match.text }}"</td>
+                    <td>{{ match.start }}</td>
+                    <td>{{ match.end }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif request.method == 'POST' and not error %}
+        <p style="text-align: center; margin-top: 2rem; color: #94a3b8;">No matches found for that pattern.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

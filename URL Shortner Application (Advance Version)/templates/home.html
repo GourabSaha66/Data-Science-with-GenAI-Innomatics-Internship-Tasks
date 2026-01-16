@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white p-5 rounded-lg shadow-sm text-center">
+    <h1 class="display-4">Simplify Your Links</h1>
+    <p class="lead">The minimal URL shortener designed for professionals.</p>
+    {% if not current_user.is_authenticated %}
+        <div class="mt-4">
+            <a href="/signup" class="btn btn-primary btn-lg px-5">Get Started</a>
+        </div>
+    {% else %}
+        <div class="mt-4">
+            <a href="/dashboard" class="btn btn-success btn-lg px-5">Go to Dashboard</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

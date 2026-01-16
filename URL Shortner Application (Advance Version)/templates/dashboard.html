@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card p-4 shadow-sm mb-4 border-0">
+            <h3>Shorten a URL</h3>
+            <form action="/shorten" method="POST" class="row g-2">
+                <div class="col-md-10">
+                    <input type="url" name="url" class="form-control form-control-lg" placeholder="Enter long URL here..." required>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-lg w-100">Shorten</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card p-3 shadow-sm border-0">
+            <h5>Your Saved URLs</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Original Link</th>
+                            <th>Short Link</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for link in links %}
+                        <tr>
+                            <td class="text-truncate" style="max-width: 300px;">{{ link.original_url }}</td>
+                            <td><a href="{{ url_for('redirect_to_url', short_code=link.short_code, _external=True) }}" target="_blank" class="text-decoration-none fw-bold">
+                                {{ request.host_url }}{{ link.short_code }}
+                            </a></td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="copyText('{{ request.host_url }}{{ link.short_code }}')">Copy</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyText(val) {
+    navigator.clipboard.writeText(val);
+    alert("URL copied to clipboard!");
+}
+</script>
+{% endblock %}
